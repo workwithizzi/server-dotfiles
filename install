@@ -36,7 +36,23 @@ if [[ ! -f "$HOME/.zshrc" ]]; then
 
 	# Install autosuggestions
 	git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-
-	echo "Logging you out of the server. Log back in for changes to take effect"
-	exit
 fi
+
+if [[ -f "$HOME/.zshrc" ]]; then
+	echo "Replacing default .zshrc with our own"
+	rm -rf "$HOME/.zshrc"
+	wget -O .zshrc https://raw.githubusercontent.com/workwithizzi/server-dotfiles/master/zshrc
+fi
+
+if [[ -f "$HOME/.bashrc" ]]; then
+	echo "Moving old bash files to 'old/' so things stay clean"
+	mkdir "$HOME/old"
+	mv "$HOME/.bashrc" "$HOME/old/.bashrc"
+	mv "$HOME/.bash_history" "$HOME/old/.bash_history"
+	echo "You can delete the 'old/' directory whenever you want."
+fi
+
+rm -rf "$HOME/install"
+
+echo "Logging you out of the server. Log back in for changes to take effect"
+exit
