@@ -1,18 +1,18 @@
 #!/bin/bash
 
-echo "Removing the Plesk intro banner"
-echo "If you haven't set up Plesk yet, you will still need to run <sudo plesk login>"
+echo "🚀 Removing the Plesk intro banner"
+echo "ℹ️ If you haven't set up Plesk yet, you will still need to run <sudo plesk login>"
 rm -rf /etc/motd
 touch /etc/motd
 
 
 if [[ ! -d "/opt/digitalocean/bin" ]]; then
-	echo "Installing the DigitialOcean Monitoring Agent:"
+	echo "🚀 Installing the DigitialOcean Monitoring Agent:"
 	curl -sSL https://agent.digitalocean.com/install.sh | sh
 fi
 
 if [[ ! -d "/opt/digitalocean/do-agent" ]]; then
-	echo "Upgrading DigitalOceans Metrics Agent:"
+	echo "🚀 Upgrading DigitalOceans Metrics Agent:"
 	# Uninstall the legacy metrics agent.
 	sudo apt-get purge do-agent
 
@@ -21,7 +21,7 @@ if [[ ! -d "/opt/digitalocean/do-agent" ]]; then
 fi
 
 if [[ ! -f "$HOME/.zshrc" ]]; then
-	echo "Setting up ZSH"
+	echo "🚀 Setting up ZSH"
 	# Install ZSH
 	sudo apt install zsh
 
@@ -39,20 +39,20 @@ if [[ ! -f "$HOME/.zshrc" ]]; then
 fi
 
 if [[ -f "$HOME/.zshrc" ]]; then
-	echo "Replacing default .zshrc with our own"
+	echo "🚀 Replacing default .zshrc with our own"
 	rm -rf "$HOME/.zshrc"
 	wget -O .zshrc https://raw.githubusercontent.com/workwithizzi/server-dotfiles/master/zshrc
+	wget -O .oh-my-zsh/custom/themes/simple.zsh-theme https://raw.githubusercontent.com/workwithizzi/server-dotfiles/master/simple.zsh-theme
 fi
 
 if [[ -f "$HOME/.bashrc" ]]; then
-	echo "Moving old bash files to 'old/' so things stay clean"
+	echo "🚀 Moving old bash files to 'old/' so things stay clean"
 	mkdir "$HOME/old"
 	mv "$HOME/.bashrc" "$HOME/old/.bashrc"
 	mv "$HOME/.bash_history" "$HOME/old/.bash_history"
-	echo "You can delete the 'old/' directory whenever you want."
+	echo "ℹ️ You can delete the 'old/' directory whenever you want."
 fi
 
 rm -rf "$HOME/install"
 
-echo "Logging you out of the server. Log back in for changes to take effect"
-exit
+echo "🤘🏾 Log out and back in for changes to take effect"

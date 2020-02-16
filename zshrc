@@ -23,7 +23,7 @@ alias npm12=/opt/plesk/node/12/bin/npm
 export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load
-ZSH_THEME="risto"
+ZSH_THEME="simple"
 
 
 # Which plugins would you like to load?
