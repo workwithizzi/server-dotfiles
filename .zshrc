@@ -3,6 +3,8 @@
 # If file is found, then source it
 include() { [[ -f "$1" ]] && source "$1"; }
 
+include "$HOME/env"
+
 # #####################################
 
 export DOTFILES="$HOME/_dotfiles"
