@@ -6,5 +6,5 @@ After the server is added, `ssh` in as the `root` user and run `sudo plesk login
 Once that has been done, run the command below to install DigitalOceans metrics agent and set up the server to run `ZSH`.
 
 ```bash
-	wget -qO install https://raw.githubusercontent.com/workwithizzi/server-dotfiles/master/install && sudo bash install
+	wget -qO install https://raw.githubusercontent.com/workwithizzi/server-dotfiles/master/plesk-server/install && sudo bash install
 ```
