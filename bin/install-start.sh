@@ -65,7 +65,7 @@ adduser "$NEW_USER"
 usermod -aG sudo "$NEW_USER"
 
 # Copy Dotfiles to new user and assign permissions
-cp "$DOTFILES" "/home/$NEW_USER/"
+cp -r "$DOTFILES" "/home/$NEW_USER"
 sudo chown -R "$NEW_USER":"$NEW_USER" "/home/$NEW_USER/_dotfiles"
 sudo chmod -R 755 "/home/$NEW_USER/_dotfiles"
 
