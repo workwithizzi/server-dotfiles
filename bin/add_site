@@ -1,0 +1,115 @@
+#!/bin/bash
+# shellcheck disable=SC1090
+
+OWNER="$SITE_OWNER"
+
+# #####################################
+
+if [[ ! "$USER" = "root" ]]; then
+	echo "You need to login as 'root' user before you can add a new site."
+	return
+fi
+
+include "$HOME/env"
+
+# Get the user input:
+echo "Domain Name (example.com)?"
+read -r DOMAIN
+
+echo "Associated username? [Default = $OWNER"
+read -r OWNER
+# if [[ ! "$OWNER" ]]; then
+# 	OWNER="$default_owner"
+# fi
+
+echo "What do you want the site's public directory to be? [Default = public]"
+read -r PUBLIC_DIR
+# if [[ ! "$PUBLIC_DIR" ]]; then
+# 	PUBLIC_DIR="$default_public_dir"
+# fi
+
+read -r "REPLY?❓  "" Do you want to connect your site to Github? [y|n]  "
+# Don't use Git
+if [[ $REPLY =~ ^[n]$ ]]; then
+	GIT_INTEGRATION=false
+	source "$BIN/add_html_placeholder"
+
+# Use Git
+else
+	GIT_INTEGRATION=true
+	echo "What's the HTTPS URL of your Github repo?"
+	read -r REPO
+	echo "What branch do you want to use? [Default = master]"
+	read -r BRANCH
+	# if [[ ! "$BRANCH" ]]; then
+	# 	BRANCH="$default_git_branch"
+	# fi
+
+	# Create the directory for NGINX
+	sudo mkdir -p "/var/www/$DOMAIN"
+
+	git clone "$REPO" "/var/www/$DOMAIN/live"
+
+	# Create deploy script
+	source "$BIN/add_deploy_script"
+	# Create webhook file
+	source "$BIN/add_hooks"
+
+	# TODO: Add command to start webhook
+fi
+
+# Create a new server block for NGINX
+source "$BIN/add_site_nginx"
+
+# enable the site with NGINX
+# sudo ln -s "/etc/nginx/sites-available/$DOMAIN" "/etc/nginx/sites-enabled/"
+
+# #####################################
+
+# Assign owner and set permissions
+# assign_dir "$OWNER" "/var/www/$DOMAIN"
+
+# #####################################
+
+# SSL Cert
+read -r "REPLY?❓  "" Do you want to add an SSL certificate? [y|n]  "
+if [[ $REPLY =~ ^[n]$ ]]; then
+	SSL_CERT=false
+
+else
+	SSL_CERT=true
+	# echo "#####################################"
+	# echo "Use this for completing the SSL cert:"
+	# echo "Email: [admin@workwithizzi.com]"
+	# # echo "1 - Agree           : [A]"
+	# # echo "2 - No              : [N]"
+	# echo "Redirect traffic: [2]"
+	# echo "#####################################"
+	# sudo certbot --nginx -d "$DOMAIN" -d "www.$DOMAIN"
+fi
+
+CREATED_DATE=$(date +"%d-%m-%y")
+CREATED_TIME=$(date +"%H:%M:%S")
+
+# Save all the info for reference later
+sudo touch "/var/www/$DOMAIN/info"
+
+{
+	echo "DOMAIN=\"$DOMAIN\""
+	echo "OWNER=\"$OWNER\""
+	echo "CREATED_DATE=\"$CREATED_DATE\""
+	echo "CREATED_TIME=\"$CREATED_TIME\""
+	echo "PUBLIC_DIR=\"$PUBLIC_DIR\""
+	echo "GIT_INTEGRATION=\"$GIT_INTEGRATION\""
+	echo "REPO=\"$REPO\""
+	echo "BRANCH=\"$BRANCH\""
+	echo "SSL_CERT=\"$SSL_CERT\""
+	echo "DEPLOY_SECRET=\"$DEPLOY_SECRET\""
+	echo "WEBHOOK_URL=\"http://$IP_ADDRESS:9000/hooks/$DOMAIN\""
+} >>"/var/www/$DOMAIN/info"
+
+# Assign owner and set permissions
+assign_dir "$OWNER" "/var/www/$DOMAIN"
+
+# # Reload NGINX
+# _nginx reload

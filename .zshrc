@@ -6,6 +6,7 @@ include() { [[ -f "$1" ]] && source "$1"; }
 # #####################################
 
 export DOTFILES="$HOME/_dotfiles"
+export BIN="$HOME/_dotfiles/bin"
 export DOTFILES_REPO="https://github.com/workwithizzi/server-dotfiles.git"
 
 # #####################################
@@ -145,4 +146,4 @@ mkdircd() { mkdir "$*" && cd "$*" || return; }
 # Utilities
 # #####################################
 
-include "$DOTFILES/bin/cli-utils.sh"
+include "$BIN/cli_utils"

@@ -8,12 +8,14 @@ fi
 if [[ ! "$DOMAIN" ]]; then
 	echo "Domain Name? [example.com]"
 	read -r DOMAIN
-fi
 
-if [[ ! "$PUBLIC_DIR" ]]; then
-	echo "What do you want the site's public directory to be? [public]"
+	# If $DOMAIN is defined, then these will be too:
+	echo "What do you want the site's public directory to be? [Default = public]"
 	read -r PUBLIC_DIR
 fi
+
+# Create and add configuration
+sudo touch "/etc/nginx/sites-available/$DOMAIN"
 
 {
 	echo "server {"
@@ -30,3 +32,9 @@ fi
 	echo "  }"
 	echo "}"
 } >>"/etc/nginx/sites-available/$DOMAIN"
+
+# enable the site with NGINX
+sudo ln -s "/etc/nginx/sites-available/$DOMAIN" "/etc/nginx/sites-enabled/"
+
+# Reload NGINX
+_nginx reload

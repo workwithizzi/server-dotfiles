@@ -3,16 +3,20 @@
 if [[ ! "$DOMAIN" ]]; then
 	echo "Domain Name? [example.com]"
 	read -r DOMAIN
-fi
 
-if [[ ! "$PUBLIC_DIR" ]]; then
-	echo "What do you want the site's public directory to be? [public]"
+	# If $DOMAIN is defined, then these will be too:
+	echo "What do you want the site's public directory to be? [Default = public]"
 	read -r PUBLIC_DIR
+	echo "Associated username? [Default = $OWNER"
+	read -r OWNER
 fi
 
 if [[ ! -d "/var/www/$DOMAIN/live/$PUBLIC_DIR" ]]; then
+	# Create the directory for NGINX
 	sudo mkdir -p "/var/www/$DOMAIN/live/$PUBLIC_DIR"
 fi
+
+sudo touch "/var/www/$DOMAIN/live/$PUBLIC_DIR/index.html"
 
 {
 	echo "<html>"
@@ -24,3 +28,5 @@ fi
 	echo "  </body>"
 	echo "</html>"
 } >>"/var/www/$DOMAIN/live/$PUBLIC_DIR/index.html"
+
+assign_file "$OWNER" "/var/www/$DOMAIN/live/$PUBLIC_DIR/index.html"

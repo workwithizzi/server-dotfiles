@@ -163,3 +163,8 @@ sites() {
 		echo "disable <site>  : Disable a site"
 	fi
 }
+
+# Create and configure a new website
+add_site() {
+	source "$BIN/add_site"
+}

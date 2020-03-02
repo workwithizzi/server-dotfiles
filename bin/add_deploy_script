@@ -3,19 +3,24 @@
 if [[ ! "$DOMAIN" ]]; then
 	echo "Domain Name? [example.com]"
 	read -r DOMAIN
+
+	# If $DOMAIN is defined, then these be too
+	echo "What git branch do you want to use? [Default = master]"
+	read -r BRANCH
+	echo "Associated username? [Default = $OWNER"
+	read -r OWNER
 fi
 
 if [[ ! -d "/var/www/$DOMAIN/" ]]; then
 	sudo mkdir -p "/var/www/$DOMAIN/"
 fi
 
-if [[ ! "$BRANCH" ]]; then
-	echo "What branch do you want to use? [master]"
-	read -r BRANCH
-fi
+sudo touch "/var/www/$DOMAIN/deploy.sh"
 
 {
 	echo "#!/bin/bash"
 	echo "git fetch --all"
 	echo "git checkout --force \"origin/$BRANCH\""
 } >>"/var/www/$DOMAIN/deploy.sh"
+
+assign_file "$OWNER" "/var/www/$DOMAIN/deploy.sh"

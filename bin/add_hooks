@@ -1,0 +1,43 @@
+#!/bin/bash
+
+if [[ ! "$DOMAIN" ]]; then
+	echo "Domain Name? [example.com]"
+	read -r DOMAIN
+
+	# If $DOMAIN is defined, then these be too
+	echo "Associated username? [Default = $OWNER"
+	read -r OWNER
+fi
+
+# TODO: Add a way to create a unique secret for the deploy
+echo "What is the secret key that you want to use for webhook?"
+read -r DEPLOY_SECRET
+
+if [[ ! -d "/var/www/$DOMAIN/" ]]; then
+	sudo mkdir -p "/var/www/$DOMAIN/"
+fi
+
+sudo touch "/var/www/$DOMAIN/hooks.json"
+
+{
+	echo "["
+	echo "  {"
+	echo "    \"id\": \"$DOMAIN\","
+	echo "    \"execute-command\": \"/var/www/$DOMAIN/deploy.sh\","
+	echo "    \"command-working-directory\": \"/var/www/$DOMAIN/live/\","
+	echo "    \"response-message\": \"Executing script...\","
+	echo "    \"trigger-rule\": {"
+	echo "      \"match\": {"
+	echo "        \"type\": \"payload-hash-sha1\","
+	echo "        \"secret\": \"$DEPLOY_SECRET\","
+	echo "        \"parameter\": {"
+	echo "          \"source\": \"header\","
+	echo "          \"name\": \"X-Hub-Signature\""
+	echo "        }"
+	echo "      }"
+	echo "    }"
+	echo "  }"
+	echo "]"
+} >>"/var/www/$DOMAIN/hooks.json"
+
+assign_file "$OWNER" "/var/www/$DOMAIN/hooks.json"
