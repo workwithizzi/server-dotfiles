@@ -5,8 +5,11 @@ if [[ ! "$DOMAIN" ]]; then
 	read -r DOMAIN
 
 	# If $DOMAIN is defined, then these be too
-	echo "Associated username? [Default = $OWNER"
+	echo "Associated username? [Default = $ENV_SITE_OWNER"
 	read -r OWNER
+	if [[ ! "$OWNER" ]]; then
+		OWNER="$ENV_SITE_OWNER"
+	fi
 fi
 
 # TODO: Add a way to create a unique secret for the deploy

@@ -10,8 +10,12 @@ if [[ ! "$DOMAIN" ]]; then
 	read -r DOMAIN
 
 	# If $DOMAIN is defined, then these will be too:
-	echo "What do you want the site's public directory to be? [Default = public]"
+	echo "What do you want the site's public directory to be? [Default = $ENV_PUBLIC_DIR]"
 	read -r PUBLIC_DIR
+	if [[ ! "$PUBLIC_DIR" ]]; then
+		PUBLIC_DIR="$ENV_PUBLIC_DIR"
+	fi
+
 fi
 
 # Create and add configuration

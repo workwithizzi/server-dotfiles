@@ -5,10 +5,16 @@ if [[ ! "$DOMAIN" ]]; then
 	read -r DOMAIN
 
 	# If $DOMAIN is defined, then these be too
-	echo "What git branch do you want to use? [Default = master]"
-	read -r BRANCH
-	echo "Associated username? [Default = $OWNER"
+	echo "Associated username? [Default = $ENV_SITE_OWNER"
 	read -r OWNER
+	if [[ ! "$OWNER" ]]; then
+		OWNER="$ENV_SITE_OWNER"
+	fi
+	echo "What git branch do you want to use? [Default = $ENV_BRANCH]"
+	read -r BRANCH
+	if [[ ! "$BRANCH" ]]; then
+		BRANCH="$ENV_BRANCH"
+	fi
 fi
 
 if [[ ! -d "/var/www/$DOMAIN/" ]]; then

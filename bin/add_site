@@ -1,8 +1,6 @@
 #!/bin/bash
 # shellcheck disable=SC1090
 
-OWNER="$SITE_OWNER"
-
 # #####################################
 
 if [[ ! "$USER" = "root" ]]; then
@@ -16,17 +14,17 @@ include "$HOME/env"
 echo "Domain Name (example.com)?"
 read -r DOMAIN
 
-echo "Associated username? [Default = $OWNER"
+echo "Associated username? [Default = $ENV_SITE_OWNER"
 read -r OWNER
-# if [[ ! "$OWNER" ]]; then
-# 	OWNER="$default_owner"
-# fi
+if [[ ! "$OWNER" ]]; then
+	OWNER="$ENV_SITE_OWNER"
+fi
 
-echo "What do you want the site's public directory to be? [Default = public]"
+echo "What do you want the site's public directory to be? [Default = $ENV_PUBLIC_DIR]"
 read -r PUBLIC_DIR
-# if [[ ! "$PUBLIC_DIR" ]]; then
-# 	PUBLIC_DIR="$default_public_dir"
-# fi
+if [[ ! "$PUBLIC_DIR" ]]; then
+	PUBLIC_DIR="$ENV_PUBLIC_DIR"
+fi
 
 read -r "REPLY?❓  "" Do you want to connect your site to Github? [y|n]  "
 # Don't use Git
@@ -39,11 +37,11 @@ else
 	GIT_INTEGRATION=true
 	echo "What's the HTTPS URL of your Github repo?"
 	read -r REPO
-	echo "What branch do you want to use? [Default = master]"
+	echo "What branch do you want to use? [Default = $ENV_BRANCH]"
 	read -r BRANCH
-	# if [[ ! "$BRANCH" ]]; then
-	# 	BRANCH="$default_git_branch"
-	# fi
+	if [[ ! "$BRANCH" ]]; then
+		BRANCH="$ENV_BRANCH"
+	fi
 
 	# Create the directory for NGINX
 	sudo mkdir -p "/var/www/$DOMAIN"
