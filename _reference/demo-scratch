@@ -1,0 +1,21 @@
+demo.workwithizzi.com
+ssh root@64.225.61.3
+rZYyXuxdqqRTeb5Rk8GvTrDhwnJmS2nhjtFbdWJPM3xqVFNHx4ZQ4Wrf532wBFzU
+
+
+admin user
+ssh addy@64.225.61.3
+p325RjeTuGnn6PUvBRUqVQpyB2PhMs9kjgRdgSKqtHWmHvDm5aWgCnxKAkQkZPpr
+
+
+# ###############################################
+
+doctl auth token
+d587d39b9ce253f05d19d51fc256a280ec1e48c173a45e4a1fcb47e209c330ef
+
+
+webhook -hooks /root/hooks/hooks.json -ip "64.225.61.3" -verbose
+
+http://64.225.61.3:9000/hooks/deploy
+
+git remote add origin https://github.com/yisraelgrimes/test-deploy.git

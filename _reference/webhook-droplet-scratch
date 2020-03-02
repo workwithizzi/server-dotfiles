@@ -1,0 +1,83 @@
+root@64.225.16.220
+
+a3hwKtGNqjTGK2y8N3GFby33nuEhtTuxpU424cZ7WGKC3Yk2LcZk8WUJESR32g8z
+
+
+
+
+#################################
+
+
+### Install GO:
+wget https://dl.google.com/go/go1.13.linux-amd64.tar.gz
+
+# Verify tarball
+sha256sum go1.13.linux-amd64.tar.gz
+# It should match:
+68a2297eb099d1a76097905a2ce334e3155004ec08cdea85f24527be3c48e856 go1.13.linux-amd64.tar.gz
+
+# Extract
+sudo tar -C /usr/local -xzf go1.13.linux-amd64.tar.gz
+
+# Add Go to the path variable
+nano ~/.profile
+# Paste:
+export PATH=$PATH:/usr/local/go/bin
+
+# Verify Go was installed
+go version
+
+
+### Install Webhook
+go get github.com/adnanh/webhook
+
+# Confirm install by looking for the file ~/go/bin/webhook
+
+
+### Set up test hook
+
+# mkdir ~/webhooks
+# mkdir ~/webhooks/deployment-tutorial
+# touch ~/webhooks/hooks.json
+# touch ~/webhooks/deployment-tutorial/deploy.sh
+# chmod +x ~/webhooks/deployment-tutorial/deploy.sh
+
+# or...
+mkdir ~/webhooks && mkdir ~/webhooks/deployment-tutorial && touch ~/webhooks/hooks.json && touch ~/webhooks/deployment-tutorial/deploy.sh && chmod +x ~/webhooks/deployment-tutorial/deploy.sh
+
+# Add content to hooks.json
+# Add content to deploy.sh
+
+### Start Webhook
+/root/go/bin/webhook -hooks /root/webhooks/hooks.json -ip "64.225.16.220" -verbose
+
+# Should be serving on http://64.225.16.220:9000/hooks/deployment-tutorial
+
+
+### Set up repo on server
+
+# Open a new terminal window and ssh in as root
+
+mkdir deployed-site && cd deployed-site && git init
+
+git remote add origin git@github.com:yisraelgrimes/test-deploy.git
+git remote add origin https://github.com/yisraelgrimes/test-deploy.git
+
+### SSH Key
+
+ssh-keygen
+
+cat /root/.ssh/webhook-test.pub:
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDXb0e1QQGNTYCcuJXbThnyJCkiMhKEtOu6u49LLiww0XiQ7Y3P5xRcM4tvU90AyLpvLcgToMAJzN/XfYFi02iWAeetvdDNMPm9zQsEoDGipzN4oaNKXherQpxY0ZpBzQU/R9d4vYb3yQM5icpuy/Vl5I8+5TS6h3sGBhvegUvSMW38WpA96xWGdD3tfbF16Dz2/7sNQ79kLRElsRA1WmHLW66kPvnUooFq2NjqeXT2NNxI7aLob3gzM/viskzPZpE9u5Gk1YCx0QH6zrJzmUhxPdHoNorvKVxS0G+H467Iwq5k19bYdwH01iC05FJHM2ZHD3sz4Bt99sh1rZp7bQjd root@webhook-test
+
+cat /root/.ssh/yis-webhook-test.pub:
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCY9iqxJbSADmwkzn/iMsaEJz5dmjlEC5Up3BqUxN7m26EGIz9i9aN6FTtrngF7oukPPKd7DzI/v6q6woxuRdAugMkAhsigUcLGCS2aqdE+p91HuULfdPZ7g03Uk9Rq1v4JRRkLnZ1GA6nmt0zcQ/hPrz39YPs2xApe7OehwR5vl/5PnxA937LtwGS5HzMAhlYJTjlrh9nR4udjtjveVwOTBW/LBRwxE/k+A/hJe3WY1uEEkOlqeqQh4CDZsJEp7YIpJVIM0IX1jbIIUELD0q5VKB+q3lZOj7WOrlbaFu00wV5oz3fXvOQgNGAlNL+ABuRQHPfgOpMRR0Qp+W3qqD5p root@webhook-test
+
+cat /root/.ssh/yis-webhook-test-2.pub:
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDZCGiY/Y0RSKCWh83thixRd5rLZX0p0B016dVIKDpMWsg8uAZVfmx26GDyCiXVQM8zEUqLvS7oiFa6kP0Hs2f2Xu7j+u/o1cGlz+bgwBLYYmi3OJt6taC9GTqALt9L6g0kD6knKhJ79SRYUvx3NEEhTO9J6kZXBra2CF0q7/hvjtANDQCToolBQXI2zZ6KT7r5oY8dpB090ZJRbivwcZe4nzkywpnW0E3cNDA0sin6e4xK6v4QxIJf/IOW8COnU9SDufJVj+gbN1IjMmO2EuclDLqclLHCMJV9y16vuLS3e7t/BFevH4ny6a8vMB2feDMpGO9Dvm2wmgRSd8rn+/0F root@webhook-test
+
+id_rsa.pub:
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC9YkpxePnP+NS7x1L16tgHN2y6n1310NU67xeDhQw+0zH8BvraMvCRQxmAgXuxK4/msW562rxcXs/7ajZ0jF2XQ5fa9i9jbDJZ/Zwm1KKRWOmRWQIFssXzIw1XcdxbZK+9mAGZ43eQHVbuRf9hcA3+aGuuH8U1nGwo5lA16Z99XmSYKc1Px4QZzbOnfdIdrtAnJ9kXvVBbvWIBEcS4TwJYdznbwwtjJG2Nv0ePsU4eJUSgMHnn4zdtUBRYt5Zjrc/C3kX3o0LwExWwqFHc0zsPCXL9kad4ZMGbY/wTXnBYcM5FBJLaoP38mBfuvVS+Dv/Qu5uAyb4+xtKOJr8EQ+MN root@webhook-test
+
+
+### Configure Github repo
