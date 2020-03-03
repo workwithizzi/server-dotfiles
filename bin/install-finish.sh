@@ -43,6 +43,10 @@ sudo add-apt-repository ppa:certbot/certbot
 # Install Certbot’s Nginx package with apt:
 sudo apt install python-certbot-nginx -y
 
+# Glances (server monitoring)
+# #####################################
+sudo curl -L https://bit.ly/glances | /bin/bash
+
 # Webhook
 # https://tinyurl.com/hm8zz8z
 # #####################################
