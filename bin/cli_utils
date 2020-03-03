@@ -104,7 +104,8 @@ sites() {
 	_enabled_dir="/etc/nginx/sites-enabled"
 
 	# Option - add
-	source "$BIN/add_site"
+	if [[ "$1" = "add" ]]; then
+		source "$BIN/add_site"
 
 	# Option - list
 	if [[ "$1" = "list" ]]; then
