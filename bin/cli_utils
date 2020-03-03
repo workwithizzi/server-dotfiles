@@ -108,7 +108,7 @@ sites() {
 		source "$BIN/add_site"
 
 	# Option - list
-	if [[ "$1" = "list" ]]; then
+	elif [[ "$1" = "list" ]]; then
 		if [[ "$2" = "available" ]]; then
 			echo "Available Sites:"
 			ls "$_available_dir"
