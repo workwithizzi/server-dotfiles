@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# #####################################
+
+# Get Info
 if [[ ! "$DOMAIN" ]]; then
 	echo "Domain Name? [example.com]"
 	read -r DOMAIN
@@ -17,6 +20,8 @@ if [[ ! "$DOMAIN" ]]; then
 		PUBLIC_DIR="$ENV_PUBLIC_DIR"
 	fi
 fi
+
+# #####################################
 
 if [[ ! -d "/var/www/$DOMAIN/live/$PUBLIC_DIR" ]]; then
 	# Create the directory for NGINX

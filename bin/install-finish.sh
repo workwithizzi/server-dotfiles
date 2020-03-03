@@ -48,7 +48,6 @@ sudo apt install python-certbot-nginx -y
 # #####################################
 doing "Installing Webhook and opening port '9000'"
 sudo apt-get install webhook
-ufw allow 9000/tcp
 
 # Authorize DigitalOcean (doctl)
 # #####################################

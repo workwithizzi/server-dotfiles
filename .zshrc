@@ -10,6 +10,9 @@ include "$HOME/env"
 export DOTFILES="$HOME/_dotfiles"
 export BIN="$HOME/_dotfiles/bin"
 export DOTFILES_REPO="https://github.com/workwithizzi/server-dotfiles.git"
+export SCRIPTS_PATH="/var/sites/scripts"
+export HOOKS_PATH="/var/sites/hooks"
+export INFO_PATH="/var/sites/info"
 
 # #####################################
 

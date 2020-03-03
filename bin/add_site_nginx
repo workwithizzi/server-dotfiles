@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# #####################################
+
+# Get Info
 if [[ ! "$USER" = "root" ]]; then
 	echo "You need to login as 'root' user before you can add a new site."
 	return
@@ -16,7 +19,15 @@ if [[ ! "$DOMAIN" ]]; then
 		PUBLIC_DIR="$ENV_PUBLIC_DIR"
 	fi
 
+	echo "Associated username? [Default = $ENV_SITE_OWNER"
+	read -r OWNER
+	if [[ ! "$OWNER" ]]; then
+		OWNER="$ENV_SITE_OWNER"
+	fi
+
 fi
+
+# #####################################
 
 # Create and add configuration
 sudo touch "/etc/nginx/sites-available/$DOMAIN"
@@ -36,6 +47,8 @@ sudo touch "/etc/nginx/sites-available/$DOMAIN"
 	echo "  }"
 	echo "}"
 } >>"/etc/nginx/sites-available/$DOMAIN"
+
+assign_file "$OWNER" "/etc/nginx/sites-available/$DOMAIN"
 
 # enable the site with NGINX
 sudo ln -s "/etc/nginx/sites-available/$DOMAIN" "/etc/nginx/sites-enabled/"

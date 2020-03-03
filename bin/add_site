@@ -8,13 +8,21 @@ if [[ ! "$USER" = "root" ]]; then
 	return
 fi
 
+CREATED_DATE=$(date +"%d-%m-%y")
+CREATED_TIME=$(date +"%H:%M:%S")
+
 include "$HOME/env"
+
+# #####################################
 
 # Get the user input:
 echo "Domain Name (example.com)?"
 read -r DOMAIN
 
-echo "Associated username? [Default = $ENV_SITE_OWNER"
+# Replace '.' with '_' to use for file names
+export CLEAN_DOMAIN="${DOMAIN//./_}"
+
+echo "Which user is the owner of this site? [Default = $ENV_SITE_OWNER"
 read -r OWNER
 if [[ ! "$OWNER" ]]; then
 	OWNER="$ENV_SITE_OWNER"
@@ -53,44 +61,24 @@ else
 	# Create webhook file
 	source "$BIN/add_hooks"
 
-	# TODO: Add command to start webhook
 fi
 
 # Create a new server block for NGINX
 source "$BIN/add_site_nginx"
 
-# enable the site with NGINX
-# sudo ln -s "/etc/nginx/sites-available/$DOMAIN" "/etc/nginx/sites-enabled/"
-
-# #####################################
-
-# Assign owner and set permissions
-# assign_dir "$OWNER" "/var/www/$DOMAIN"
-
-# #####################################
-
 # SSL Cert
+# #####################################
 read -r "REPLY?❓  "" Do you want to add an SSL certificate? [y|n]  "
 if [[ $REPLY =~ ^[n]$ ]]; then
 	SSL_CERT=false
 
 else
 	SSL_CERT=true
-	# echo "#####################################"
-	# echo "Use this for completing the SSL cert:"
-	# echo "Email: [admin@workwithizzi.com]"
-	# # echo "1 - Agree           : [A]"
-	# # echo "2 - No              : [N]"
-	# echo "Redirect traffic: [2]"
-	# echo "#####################################"
-	# sudo certbot --nginx -d "$DOMAIN" -d "www.$DOMAIN"
+	source "$BIN/add_site_ssl"
 fi
 
-CREATED_DATE=$(date +"%d-%m-%y")
-CREATED_TIME=$(date +"%H:%M:%S")
-
 # Save all the info for reference later
-sudo touch "/var/www/$DOMAIN/info"
+sudo touch "$INFO_PATH/$CLEAN_DOMAIN"
 
 {
 	echo "DOMAIN=\"$DOMAIN\""
@@ -103,13 +91,14 @@ sudo touch "/var/www/$DOMAIN/info"
 	echo "BRANCH=\"$BRANCH\""
 	echo "SSL_CERT=\"$SSL_CERT\""
 	echo "DEPLOY_SECRET=\"$DEPLOY_SECRET\""
-	echo "WEBHOOK_URL=\"http://$IP_ADDRESS:9000/hooks/$DOMAIN\""
-} >>"/var/www/$DOMAIN/info"
+	echo "WEBHOOK_URL=\"http://$ENV_WEBHOOK_URL:9000/hooks/$CLEAN_DOMAIN\""
+} >>"$INFO_PATH/$CLEAN_DOMAIN"
 
 # Assign owner and set permissions
+assign_file "$OWNER" "$INFO_PATH/$CLEAN_DOMAIN"
 assign_dir "$OWNER" "/var/www/$DOMAIN"
 
 # # Reload NGINX
 # _nginx reload
 
-unset DOMAIN OWNER CREATED_DATE CREATED_TIME PUBLIC_DIR GIT_INTEGRATION REPO BRANCH SSL_CERT DEPLOY_SECRET IP_ADDRESS
+unset DOMAIN CLEAN_DOMAIN OWNER CREATED_DATE CREATED_TIME PUBLIC_DIR GIT_INTEGRATION REPO BRANCH SSL_CERT DEPLOY_SECRET IP_ADDRESS

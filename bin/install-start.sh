@@ -50,6 +50,8 @@ ufw allow OpenSSH
 
 # Enable the firewall
 ufw enable
+# Open port for Webhook
+ufw allow 9000/tcp
 
 # Create Admin-User
 # #####################################

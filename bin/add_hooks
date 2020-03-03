@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Get Info
 if [[ ! "$DOMAIN" ]]; then
 	echo "Domain Name? [example.com]"
 	read -r DOMAIN
@@ -16,17 +17,19 @@ fi
 echo "What is the secret key that you want to use for webhook?"
 read -r DEPLOY_SECRET
 
-if [[ ! -d "/var/www/$DOMAIN/" ]]; then
-	sudo mkdir -p "/var/www/$DOMAIN/"
+# #####################################
+
+if [[ ! -d "$HOOKS_PATH" ]]; then
+	sudo mkdir -p "$HOOKS_PATH"
 fi
 
-sudo touch "/var/www/$DOMAIN/hooks.json"
+sudo touch "$HOOKS_PATH/$CLEAN_DOMAIN.json"
 
 {
 	echo "["
 	echo "  {"
-	echo "    \"id\": \"$DOMAIN\","
-	echo "    \"execute-command\": \"/var/www/$DOMAIN/deploy.sh\","
+	echo "    \"id\": \"$CLEAN_DOMAIN\","
+	echo "    \"execute-command\": \"$_scripts/$CLEAN_DOMAIN.sh\","
 	echo "    \"command-working-directory\": \"/var/www/$DOMAIN/live/\","
 	echo "    \"response-message\": \"Executing script...\","
 	echo "    \"trigger-rule\": {"
@@ -41,6 +44,6 @@ sudo touch "/var/www/$DOMAIN/hooks.json"
 	echo "    }"
 	echo "  }"
 	echo "]"
-} >>"/var/www/$DOMAIN/hooks.json"
+} >>"$HOOKS_PATH/$CLEAN_DOMAIN.json"
 
-assign_file "$OWNER" "/var/www/$DOMAIN/hooks.json"
+assign_file "$OWNER" "$HOOKS_PATH/$CLEAN_DOMAIN.json"

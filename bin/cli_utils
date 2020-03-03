@@ -100,17 +100,20 @@ _ssl() {
 }
 
 sites() {
-	AVAILABLE_DIR="/etc/nginx/sites-available"
-	ENABLED_DIR="/etc/nginx/sites-enabled"
+	_available_dir="/etc/nginx/sites-available"
+	_enabled_dir="/etc/nginx/sites-enabled"
+
+	# Option - add
+	source "$BIN/add_site"
 
 	# Option - list
 	if [[ "$1" = "list" ]]; then
 		if [[ "$2" = "available" ]]; then
 			echo "Available Sites:"
-			ls "$AVAILABLE_DIR"
+			ls "$_available_dir"
 		else
 			echo "Enabled Sites:"
-			ls "$ENABLED_DIR"
+			ls "$_enabled_dir"
 		fi
 
 	# Option - cd
@@ -119,8 +122,8 @@ sites() {
 
 	# Option - enable
 	elif [[ "$1" = "enable" ]]; then
-		if [ ! -f "$ENABLED_DIR/$2" ] && [ -f "$AVAILABLE_DIR/$2" ]; then
-			sudo ln -s "$AVAILABLE_DIR/$2" "$ENABLED_DIR"
+		if [ ! -f "$_enabled_dir/$2" ] && [ -f "$_available_dir/$2" ]; then
+			sudo ln -s "$_available_dir/$2" "$_enabled_dir"
 			_nginx reload
 			_nginx check
 		else
@@ -132,8 +135,8 @@ sites() {
 	elif [[ "$1" = "disable" ]]; then
 
 		# Make sure site is enabled
-		if [ ! -f "$ENABLED_DIR/$2" ]; then
-			sudo rm "$ENABLED_DIR/$2"
+		if [ ! -f "$_enabled_dir/$2" ]; then
+			sudo rm "$_enabled_dir/$2"
 			_nginx reload
 			_nginx check
 		else
@@ -141,16 +144,54 @@ sites() {
 			echo "try [sites list] or [sites list available]"
 		fi
 
+	# Option - info
+	elif [ "$1" = "info" ]; then
+		DOMAIN="$2"
+		if [[ ! "$DOMAIN" ]]; then
+			echo "Which site do you want info on?"
+			read -r DOMAIN
+		fi
+
+		CLEAN_DOMAIN="${DOMAIN//./_}"
+
+		if [ -f "$INFO_PATH/$CLEAN_DOMAIN" ]; then
+			cat "$INFO_PATH/$CLEAN_DOMAIN"
+		else
+			echo "I can't find info on $DOMAIN"
+		fi
+
 	# Option - burn
 	elif [ "$1" = "burn" ]; then
-		if [ -f "$ENABLED_DIR/$2" ]; then
-			sudo rm "$ENABLED_DIR/$2"
+		DOMAIN="$2"
+		if [[ ! "$DOMAIN" ]]; then
+			echo "Which site do you want to remove?"
+			read -r DOMAIN
 		fi
-		if [ -f "$AVAILABLE_DIR/$2" ]; then
-			sudo rm "$AVAILABLE_DIR/$2"
+
+		CLEAN_DOMAIN="${DOMAIN//./_}"
+
+		# Remove NGINX files
+		if [ -f "$_enabled_dir/$2" ]; then
+			sudo rm "$_enabled_dir/$2"
+		fi
+		if [ -f "$_available_dir/$2" ]; then
+			sudo rm "$_available_dir/$2"
 		fi
 		_nginx reload
-		_nginx check
+		# Remove Website files
+		if [ -d "/var/www/$DOMAIN" ]; then
+			rm -rf "/var/www/$DOMAIN"
+		fi
+		# Remove other files
+		if [ -f "$SCRIPTS_PATH/$CLEAN_DOMAIN" ]; then
+			rm "$SCRIPTS_PATH/$CLEAN_DOMAIN.sh"
+		fi
+		if [ -f "$HOOKS_PATH/$CLEAN_DOMAIN" ]; then
+			rm "$HOOKS_PATH/$CLEAN_DOMAIN.json"
+		fi
+		if [ -f "$INFO_PATH/$CLEAN_DOMAIN" ]; then
+			rm "$INFO_PATH/$CLEAN_DOMAIN"
+		fi
 
 	else
 
