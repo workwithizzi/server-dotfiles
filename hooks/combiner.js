@@ -25,7 +25,6 @@ async function runCombiner() {
         writeFile(res, "[" + data + "\n]");
       }
     });
-
   } catch (error) {
     throw error;
   }
