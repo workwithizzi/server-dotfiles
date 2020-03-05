@@ -1,5 +1,21 @@
 [
   {
+    "id": "gatsby-one_izzi_ws",
+    "execute-command": "/var/sites/scripts/gatsby-one_izzi_ws.sh",
+    "command-working-directory": "/var/www/gatsby-one.izzi.ws/live/",
+    "response-message": "Executing script...",
+    "trigger-rule": {
+      "match": {
+        "type": "payload-hash-sha1",
+        "secret": "gatsbytestone",
+        "parameter": {
+          "source": "header",
+          "name": "X-Hub-Signature"
+        }
+      }
+    }
+  },
+  {
     "id": "demo-two_izzi_ws",
     "execute-command": "/var/sites/scripts/demo-two_izzi_ws.sh",
     "command-working-directory": "/var/www/demo-two.izzi.ws/live/",
@@ -16,14 +32,14 @@
     }
   },
   {
-    "id": "gatsby-one_izzi_ws",
-    "execute-command": "/var/sites/scripts/gatsby-one_izzi_ws.sh",
-    "command-working-directory": "/var/www/gatsby-one.izzi.ws/live/",
+    "id": "gatsby-three_izzi_ws",
+    "execute-command": "/var/sites/scripts/gatsby-three_izzi_ws.sh",
+    "command-working-directory": "/var/www/gatsby-three.izzi.ws/live/",
     "response-message": "Executing script...",
     "trigger-rule": {
       "match": {
         "type": "payload-hash-sha1",
-        "secret": "gatsbytestone",
+        "secret": "gatsbytestthree",
         "parameter": {
           "source": "header",
           "name": "X-Hub-Signature"
