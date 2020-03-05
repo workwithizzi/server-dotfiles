@@ -7,3 +7,9 @@ After the server is added, `ssh` in as the `root` user and clone this repo to th
 ```bash
 	git clone https://github.com/workwithizzi/server-dotfiles
 ```
+
+## Merge hooks
+
+To merge the hook files from `hooks` directory:
+
+- Run `node combiner/index`
