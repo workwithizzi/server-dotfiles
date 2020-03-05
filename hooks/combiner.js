@@ -15,16 +15,16 @@ async function runCombiner() {
   try {
     // Read directory
     const files = await readDir(dir);
-    files.forEach(async file => {
+    for (const file of files) {
       if (path.extname(file) === ".json" && file !== outFile) {
         // Read file
         const fileContent = await readFile(file);
-        // Delete '[]' at the beginning and at the end of the file
+        // Delete '[]' at the beginning and at the end of the file and push to the array
         data.push(fileContent.toString("utf-8").slice(1, -2));
-        // Write file
-        writeFile(res, "[" + data + "\n]");
       }
-    });
+    }
+    // Write file
+    writeFile(res, "[" + data + "\n]");
   } catch (error) {
     throw error;
   }
