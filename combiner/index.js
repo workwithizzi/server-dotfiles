@@ -3,6 +3,7 @@ const path = require("path");
 const readDir = require("./readDir");
 const readFile = require("./readFile");
 const writeFile = require("./writeFile")
+const testJSON = require("./testJSON");
 
 // PATH to the "hooks/" directory
 const dir = path.join(__dirname, '..', 'hooks');
@@ -27,6 +28,11 @@ async function runCombiner() {
     }
     // Write file
     writeFile(res, "[" + data + "\n]");
+    // Check if the Output file is valid
+    // Read the output file
+    const jsonContent = await readFile(res);
+    // Check the JSON correctness
+    testJSON(jsonContent);
   } catch (error) {
     throw error;
   }
