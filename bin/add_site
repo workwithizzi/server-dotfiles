@@ -59,7 +59,7 @@ else
 	# Create deploy script
 	source "$BIN/add_deploy_script"
 	# Create webhook file
-	source "$BIN/create_hook"
+	source "$BIN/hooks_create.sh"
 
 fi
 

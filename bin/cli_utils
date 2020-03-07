@@ -1,4 +1,10 @@
-#! /usr/bin/zsh
+#!/bin/bash
+# shellcheck disable=SC1090,SC2034
+
+# export current_file=${0:a}
+export BIN=${0:a:h}
+
+source "$BIN/colors.sh"
 
 # Change owner and permissions
 assign_dir() {
@@ -219,51 +225,4 @@ add_site() {
 	source "$BIN/add_site"
 }
 
-# Manage Webhook
-_webhook() {
-	_webhookid=$(pidof webhook)
-	# Create a new hook
-	if [[ "$1" = "create" ]]; then
-		DOMAIN="$2"
-		source "$BIN/create_hook"
-
-	# Make hook available to webhook
-	elif [[ "$1" = "add" ]]; then
-		# TODO: Add check to make sure hook isn't already there
-		if [[ ! "$2" ]]; then
-			echo "Domain Name? [example.com]"
-			read -r DOMAIN
-		else
-			DOMAIN="$2"
-		fi
-		CLEAN_DOMAIN="${DOMAIN//./_}"
-		echo "$CLEAN_DOMAIN" >>"$HOME/hooks"
-
-	# Stop webhook
-	elif [[ "$1" = "stop" ]]; then
-		kill $_webhookid
-
-	# Start webhook
-	elif [[ "$1" = "start" ]]; then
-		if [[ ! -f "$HOME/hooks" ]]; then
-			echo "You don't have any hooks defined for the command"
-		else
-			# Get the file names from the list in 'hooks'
-			IFS=$'\n' read -d '' -r -a names <"$HOME/hooks"
-			# Add the other stuff to it
-			array_loop=$(printf " -hooks $HOOKS_PATH/%s.json" "${names[@]}")
-			# Start the server
-			nohup webhook$array_loop &
-		fi
-
-	else
-
-		echo "_webhook options:"
-		echo "create : Creates a new webhook file using the template"
-		echo "add    : Makes a hook file availble to webhook"
-		echo "stop   : Stops webhook"
-		echo "start  : Starts webhook"
-	fi
-
-	unset DOMAIN CLEAN_DOMAIN _webhookid
-}
+source "$BIN/hooks.sh"
