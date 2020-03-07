@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# #####################################
+
+# Get Info
+if [[ ! "$DOMAIN" ]]; then
+	echo "Domain Name? [example.com]"
+	read -r DOMAIN
+
+	# If $DOMAIN is defined, then these will be too:
+	echo "Associated username? [Default = $ENV_SITE_OWNER"
+	read -r OWNER
+	if [[ ! "$OWNER" ]]; then
+		OWNER="$ENV_SITE_OWNER"
+	fi
+
+	echo "What do you want the site's public directory to be? [Default = $ENV_PUBLIC_DIR]"
+	read -r PUBLIC_DIR
+	if [[ ! "$PUBLIC_DIR" ]]; then
+		PUBLIC_DIR="$ENV_PUBLIC_DIR"
+	fi
+fi
+
+# #####################################
+
+if [[ ! -d "/var/www/$DOMAIN/live/$PUBLIC_DIR" ]]; then
+	# Create the directory for NGINX
+	sudo mkdir -p "/var/www/$DOMAIN/live/$PUBLIC_DIR"
+fi
+
+sudo touch "/var/www/$DOMAIN/live/$PUBLIC_DIR/index.html"
+
+{
+	echo "<html>"
+	echo "  <head>"
+	echo "    <title>Welcome to $DOMAIN!</title>"
+	echo "  </head>"
+	echo "  <body>"
+	echo "    <h1>Success!  The $DOMAIN server block is working!</h1>"
+	echo "  </body>"
+	echo "</html>"
+} >>"/var/www/$DOMAIN/live/$PUBLIC_DIR/index.html"
+
+assign_file "$OWNER" "/var/www/$DOMAIN/live/$PUBLIC_DIR/index.html"

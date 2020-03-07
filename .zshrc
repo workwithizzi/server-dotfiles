@@ -1,30 +1,29 @@
-# shellcheck shell=sh
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+#! /usr/bin/zsh
 
-# Default version of Node to use
-export NODEPATH=/opt/plesk/node/10/bin
+# If file is found, then source it
+include() { [[ -f "$1" ]] && source "$1"; }
 
-# Add Plesk's node to the PATH
-export PATH=$NODEPATH:$PATH
+include "$HOME/env"
 
-# Add options for the other versions of node
-alias node8=/opt/plesk/node/8/bin/node
-alias npm8=/opt/plesk/node/8/bin/npm
+# #####################################
 
-alias node10=/opt/plesk/node/10/bin/node
-alias npm10=/opt/plesk/node/10/bin/npm
+export DOTFILES="$HOME/_dotfiles"
+export BIN="$HOME/_dotfiles/bin"
+export DOTFILES_REPO="https://github.com/workwithizzi/server-dotfiles.git"
+export SCRIPTS_PATH="/var/sites/scripts"
+export HOOKS_PATH="/var/sites/hooks"
+export INFO_PATH="/var/sites/info"
 
-alias node12=/opt/plesk/node/12/bin/node
-alias npm12=/opt/plesk/node/12/bin/npm
+# #####################################
 
+# Update path to include user and snap
+export PATH="$HOME/bin:/snap/bin:$PATH"
 
 # Path to your oh-my-zsh installation.
-export ZSH=$HOME/.oh-my-zsh
+export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load
 ZSH_THEME="simple"
-
 
 # Which plugins would you like to load?
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
@@ -34,10 +33,9 @@ plugins=(
 	extract
 	zsh-syntax-highlighting
 	zsh-autosuggestions
-	)
+)
 
-source $ZSH/oh-my-zsh.sh
-
+include "$ZSH/oh-my-zsh.sh"
 
 # Use Case Insensitive Globbing
 setopt NO_CASE_GLOB
@@ -46,7 +44,7 @@ setopt NO_CASE_GLOB
 setopt AUTO_CD
 
 # Save shell history upon exiting shell
-HISTFILE=$HOME/.zsh_history
+HISTFILE="$HOME/.zsh_history"
 
 # Add timestamp (in unix epoch time) to shell history
 setopt EXTENDED_HISTORY
@@ -80,7 +78,6 @@ setopt HIST_VERIFY
 setopt CORRECT
 setopt CORRECT_ALL
 
-
 # #####################################
 # Completion
 # #####################################
@@ -95,6 +92,8 @@ zstyle ':completion:*' expand prefix suffix
 # Initialize zsh completion system. @see: t.ly/7J6B2
 autoload -Uz compinit && compinit
 
+# Add completion for doctl (DigitalOceal cli)
+source <(doctl completion zsh)
 
 # #####################################
 # Shortcuts
@@ -119,10 +118,6 @@ shorttime() {
 	date +"%H%M%S"
 }
 
-# Copy the current directory path to the clipboard
-alias copypath="pwd|pbcopy"
-
-
 # #####################################
 # Files & Navigation
 # #####################################
@@ -139,22 +134,21 @@ alias ...="cd ../../"
 # G - use Color
 alias lsa="ls -AFG"
 
+# Do stuff above and:
+# l - list permissions
+alias lsl="ls -AFGl"
+
 # Do the stuff above and:
 # sk - print size in kilobytes
 # S  - Sort by size
 # r  - Reverse the sort so largest is on top
-alias lss="ls -AFGskSr"
+alias lss="ls -AFGskSrl"
 
 # Make a directory and cd into it
 mkdircd() { mkdir "$*" && cd "$*" || return; }
-
 
 # #####################################
 # Utilities
 # #####################################
 
-# Go to directory where sites are and list them
-alias list-sites="cd /var/www/vhosts && ls -d */"
-
-# Remove the Plesk "intro" banner
-alias hush_plesk="rm -rf /etc/motd && touch /etc/motd"
+include "$BIN/cli_utils"
