@@ -63,7 +63,7 @@ ask() {
 
 # ##################
 
-# # Default to No if the user presses enter without giving an answer:
+# Default to No if the user presses enter without giving an answer:
 # if ask "Do you want to do such-and-such?" N; then
 # 	echo "Yes"
 # else
