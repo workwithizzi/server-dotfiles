@@ -1,34 +1,22 @@
-#!/usr/bin/env bash
-# shellcheck disable=SC1090
+#!/bin/bash
+# shellcheck disable=SC1090,SC2034
 
 doing() { echo "🚀  ""$*"; }
 
 export DOTFILES="$HOME/_dotfiles"
-
-# #####################################
-
-# Resources
-# #####################################
-# Automated setup script: https://tinyurl.com/ydaw7zx3
+export SETUP_D=${0:a:h}
 
 # 'root' Environment
 # #####################################
-if [[ ! -f "$HOME/.zshrc" ]]; then
-	doing "Setting up ZSH"
+source "$SETUP_D/user_config.sh"
 
-	export NEW_USER="root"
-	source "$DOTFILES/bin/user-config.sh"
-	unset NEW_USER
-fi
-
-# Make sure everything is up to date
 # #####################################
-doing "Updating everything..."
+doing "Updating all the things..."
 apt update -y
 apt upgrade -y
 
-# DigitalOcean
 # #####################################
+# DigitalOcean
 # Metrics
 if [[ ! -d "/opt/digitalocean/do-agent" ]]; then
 	doing "Upgrading DigitalOceans Metrics Agent..."
@@ -40,14 +28,13 @@ if [[ ! -d "/opt/digitalocean/do-agent" ]]; then
 fi
 
 # Doctl (DigitalOcean's Command-Line tool)
-doing "Installing DigitalOcean's cli [doctl]"
+doing "Installing [doctl] -- DigitalOcean's cli..."
 snap install doctl
 
-# Firewall
 # #####################################
+# Firewall
 doing "Configuring Firewall to allow SSH connections"
 ufw allow OpenSSH
-
 # Enable the firewall
 ufw enable
 # Open port for Webhook
@@ -55,26 +42,26 @@ ufw allow 9000/tcp
 
 # Create Admin-User
 # #####################################
-echo "❓ What do you want the admin username to be? [not 'root' user]"
-read -r NEW_USER
+echo "❓ What do you want the admin username to be? [not 'root']"
+read -r ADMIN_USER
 
 doing "Creating your admin user..."
 
 # Create user
-adduser "$NEW_USER"
+adduser "$ADMIN_USER"
 
 # Give user admin privileges
-usermod -aG sudo "$NEW_USER"
+usermod -aG sudo "$ADMIN_USER"
 
 # Copy Dotfiles to new user and assign permissions
-cp -r "$DOTFILES" "/home/$NEW_USER"
-sudo chown -R "$NEW_USER":"$NEW_USER" "/home/$NEW_USER/_dotfiles"
-sudo chmod -R 755 "/home/$NEW_USER/_dotfiles"
+cp -r "$DOTFILES" "/home/$ADMIN_USER"
+sudo chown -R "$ADMIN_USER":"$ADMIN_USER" "/home/$ADMIN_USER/_dotfiles"
+sudo chmod -R 755 "/home/$ADMIN_USER/_dotfiles"
 
 # Switch to new user
 # #####################################
-doing "Switching to the user '$NEW_USER' to finish the install."
-echo "Once you've changed to that account, finish the install"
-echo "by running [ source ~/_dotfiles/bin/install-finish.sh ]"
+doing "Switching to '$ADMIN_USER' to finish the install..."
+echo "Once you're in that account, finish the install"
+echo "by running [ source \$HOME/_dotfiles/setup/install_finish.sh ]"
 
-su - "$NEW_USER"
+su - "$ADMIN_USER"

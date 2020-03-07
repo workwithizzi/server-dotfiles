@@ -38,7 +38,7 @@ read -r "REPLY?❓  "" Do you want to connect your site to Github? [y|n]  "
 # Don't use Git
 if [[ $REPLY =~ ^[n]$ ]]; then
 	GIT_INTEGRATION=false
-	source "$BIN/add_html_placeholder"
+	source "$BIN/add_html_placeholder.sh"
 
 # Use Git
 else
@@ -57,14 +57,14 @@ else
 	git clone "$REPO" "/var/www/$DOMAIN/live"
 
 	# Create deploy script
-	source "$BIN/add_deploy_script"
+	source "$BIN/add_deploy_script.sh"
 	# Create webhook file
 	source "$BIN/hooks_create.sh"
 
 fi
 
 # Create a new server block for NGINX
-source "$BIN/add_site_nginx"
+source "$BIN/add_site_nginx.sh"
 
 # SSL Cert
 # #####################################
@@ -74,7 +74,7 @@ if [[ $REPLY =~ ^[n]$ ]]; then
 
 else
 	SSL_CERT=true
-	source "$BIN/add_site_ssl"
+	source "$BIN/add_site_ssl.sh"
 fi
 
 # Save all the info for reference later

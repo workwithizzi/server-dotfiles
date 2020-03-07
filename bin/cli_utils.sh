@@ -4,7 +4,7 @@
 # export current_file=${0:a}
 export BIN=${0:a:h}
 
-source "$BIN/colors.sh"
+source "$BIN/utils/colors.sh"
 
 # Change owner and permissions
 assign_dir() {
@@ -85,7 +85,7 @@ _ssl() {
 		if [[ "$2" ]]; then
 			DOMAIN="$2"
 		fi
-		source "$BIN/add_site_ssl"
+		source "$BIN/add_site_ssl.sh"
 		unset DOMAIN
 
 	elif [[ "$1" = "renew" ]]; then
@@ -118,7 +118,7 @@ sites() {
 
 	# Option - add
 	if [[ "$1" = "add" ]]; then
-		source "$BIN/add_site"
+		source "$BIN/add_site.sh"
 
 	# Option - list
 	elif [[ "$1" = "list" ]]; then
@@ -222,7 +222,7 @@ sites() {
 
 # Create and configure a new website
 add_site() {
-	source "$BIN/add_site"
+	source "$BIN/add_site.sh"
 }
 
 source "$BIN/hooks.sh"
