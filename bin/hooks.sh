@@ -15,17 +15,21 @@ hooks() {
 	fi
 	FNAME="${DOMAIN//./_}"
 
-	if [[ "$1" = "create" ]]; then
+	if [[ "$1" = "combine" ]]; then
+		echo "Creating 'master' hooks.json file..."
+		node "$BIN/merge_hooks/index.js" "$HOOKS_PATH" "$HOME/hooks.json"
+
+	elif [[ "$1" = "create" ]]; then
 		echo "Creating Hook..."
 		source "$BIN/hooks_create.sh" "$DOMAIN"
 		# Reload main hooks file
-		node "$BIN/merge_hooks/index.js" "$HOOKS_PATH" "$HOME/hooks.json"
+		hooks combine
 
 	elif [[ "$1" = "remove" ]]; then
 		echo "Removing Hook..."
 		source "$BIN/hooks_remove.sh" "$DOMAIN"
 		# Reload main hooks file
-		node "$BIN/merge_hooks/index.js" "$HOOKS_PATH" "$HOME/hooks.json"
+		hooks combine
 
 	elif [[ "$1" = "view" ]]; then
 		echo "Hook info for $DOMAIN:"
@@ -56,6 +60,7 @@ hooks() {
 	else
 		echo "${BPurple}<hooks> : Shortcuts for working with Webhook${Reset}"
 		echo "commands:"
+		echo "combine: Compiles individual hooks files into \"master\" hooks file."
 		echo "create : Creates the domain's hook file and adds it to the \"master\" hooks file."
 		echo "remove : Removes the domain's hook file and removes it from the \"master\" hooks file."
 		echo "stop   : Stops the webhook process using <kill> command"
