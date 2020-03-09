@@ -6,7 +6,7 @@ export BIN=${0:a:h}
 source "$BIN/utils/colors.sh"
 
 sites() {
-	# if [[ "$1" = "add" ]] && [[ ! "$2" ]]; then
+	# if [[ "$1" = "remove" ]] && [[ ! "$2" ]]; then
 	# 	echo "Domain Name? [example.com]"
 	# 	read -r DOMAIN
 	# else
@@ -17,29 +17,30 @@ sites() {
 	# ####################
 
 	if [[ "$1" = "create" ]]; then
-		# echo "create"
 		source "$BIN/sites_create.sh"
 
 	elif [[ "$1" = "remove" ]]; then
-		echo "remove"
+		# Pass domain name if provided
+		source "$BIN/sites_remove.sh" "$2"
 
 	elif [[ "$1" = "list" ]]; then
-		echo "list"
+		echo "Active Sites:"
+		ls /etc/nginx/sites-enabled
 
 	elif [[ "$1" = "go" ]]; then
-		echo "go"
+		source "$BIN/sites_go.sh"
 
 	elif [[ "$1" = "enable" ]]; then
-		echo "enable"
+		source "$BIN/sites_enable_disable.sh" "enable" "$2"
 
 	elif [[ "$1" = "disable" ]]; then
-		echo "disable"
+		source "$BIN/sites_enable_disable.sh" "disable" "$2"
 
 	elif [[ "$1" = "info" ]]; then
-		echo "info"
+		source "$BIN/sites_info.sh" "$2"
 
 	elif [[ "$1" = "rename" ]]; then
-		echo "rename"
+		source "$BIN/sites_rename.sh" "$2" "$3"
 
 	elif [[ "$1" = "defaults" ]]; then
 		echo "defaults-add"

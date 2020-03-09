@@ -22,7 +22,7 @@ echo "Domain Name (example.com)?"
 read -r DOMAIN
 
 # Make sure the site doesn't already exist
-source "$BIN/sites_check_domain.sh" "$DOMAIN"
+source "$BIN/check_domain_exists.sh" "$DOMAIN"
 
 # #####################################
 
@@ -51,39 +51,56 @@ if ask "Do you want to connect your site to Github?" Y; then
 	export GIT_INTEGRATION=true
 	echo "What's the HTTPS URL of your Github repo?"
 	read -r REPO
+
+	rm -rf "/var/www/$DOMAIN/live"
+	git clone "$REPO" "/var/www/$DOMAIN/live"
+
+	# ##################
+	# Branch
 	echo "What branch do you want to use? [Default = $ENV_BRANCH]"
 	read -r BRANCH
 	if [[ -z "$BRANCH" ]]; then
 		BRANCH="$ENV_BRANCH"
 	fi
 
-	rm -rf "/var/www/$DOMAIN/live"
-	git clone "$REPO" "/var/www/$DOMAIN/live"
-	# TODO: Add checkout command if branch isn't master
+	if [[ "$BRANCH" != "master" ]]; then
+		git checkout "$BRANCH"
+	fi
 
-	# TODO: Create deploy script
-	# source "$BIN/add_deploy_script.sh"
-	# TODO: Create webhook file
-	# source "$BIN/hooks_create.sh"
+	# ##################
+	# Create Deploy Script
+	source "$BIN/sites_deploy_script.sh" "$DOMAIN" "$OWNER" "$BRANCH"
+
+	# ##################
+	# Create Hook
+	source "$BIN/hooks_create.sh" "$DOMAIN" "$OWNER"
 
 else
 	# No
 	export GIT_INTEGRATION=false
-	# TODO: Add placeholder index.html file
-	# source "$BIN/add_html_placeholder.sh"
+	# Create index.html placeholder
+	source "$BIN/sites_html_placeholder.sh" "$DOMAIN" "$OWNER" "$PUBLIC_DIR"
 fi
 
 # #####################################
-# TODO: Configure NGINX
-source "$BIN/add_site_nginx.sh"
+# NGINX
+source "$BIN/nginx_create.sh" "$DOMAIN" "$OWNER" "$PUBLIC_DIR"
+# TODO: Create enable/reload scripts to use here
+# enable the site with NGINX
+sudo ln -s "/etc/nginx/sites-available/$DOMAIN" "/etc/nginx/sites-enabled/"
+# Reload NGINX
+_nginx reload
+
+# #####################################
+# #####################################
+# VVVVVVVVVVVVVVVVVVVVVVVVV
+# #####################################
 
 # #####################################
 # SSL Cert
-read -r "REPLY?❓  "" Do you want to add an SSL certificate? [y|n]  "
 if ask "Do you want to add an SSL certificate?" Y; then
 	export SSL_CERT=true
-	# TODO: Add ssl cert
-	# source "$BIN/add_site_ssl.sh"
+	source "$BIN/ssl_create.sh" "$DOMAIN"
 else
 	export SSL_CERT=false
 fi
@@ -91,27 +108,34 @@ fi
 # #####################################
 # Create an 'info' file for reference
 
-# sudo touch "$INFO_PATH/$FNAME"
+sudo touch "$INFO_PATH/$FNAME"
 
-# {
-# 	echo "DOMAIN=\"$DOMAIN\""
-# 	echo "OWNER=\"$OWNER\""
-# 	echo "CREATED_DATE=\"$CREATED_DATE\""
-# 	echo "CREATED_TIME=\"$CREATED_TIME\""
-# 	echo "PUBLIC_DIR=\"$PUBLIC_DIR\""
-# 	echo "GIT_INTEGRATION=\"$GIT_INTEGRATION\""
-# 	echo "REPO=\"$REPO\""
-# 	echo "BRANCH=\"$BRANCH\""
-# 	echo "SSL_CERT=\"$SSL_CERT\""
-# 	echo "DEPLOY_SECRET=\"$DEPLOY_SECRET\""
-# 	echo "WEBHOOK_URL=\"http://$ENV_WEBHOOK_URL:9000/hooks/$FNAME\""
-# } >>"$INFO_PATH/$FNAME"
+{
+	echo "DOMAIN=\"$DOMAIN\""
+	echo "OWNER=\"$OWNER\""
+	echo "CREATED_DATE=\"$CREATED_DATE\""
+	echo "CREATED_TIME=\"$CREATED_TIME\""
+	echo "PUBLIC_DIR=\"$PUBLIC_DIR\""
+	echo "SSL_CERT=\"$SSL_CERT\""
+	echo "GIT_INTEGRATION=\"$GIT_INTEGRATION\""
+} >>"$INFO_PATH/$FNAME"
 
-# # Assign owner and set permissions
-# assign_file "$OWNER" "$INFO_PATH/$FNAME"
-# assign_dir "$OWNER" "/var/www/$DOMAIN"
+if [[ "$GIT_INTEGRATION" ]]; then
 
-# # # Reload NGINX
-# # _nginx reload
+	{
+		echo "REPO=\"$REPO\""
+		echo "BRANCH=\"$BRANCH\""
+		echo "DEPLOY_SECRET=\"$DEPLOY_SECRET\""
+		echo "WEBHOOK_URL=\"http://$ENV_WEBHOOK_URL:9000/hooks/$FNAME\""
+	} >>"$INFO_PATH/$FNAME"
 
-# unset DOMAIN FNAME OWNER CREATED_DATE CREATED_TIME PUBLIC_DIR GIT_INTEGRATION REPO BRANCH SSL_CERT DEPLOY_SECRET IP_ADDRESS
+fi
+
+# Assign owner and set permissions
+assign_file "$OWNER" "$INFO_PATH/$FNAME"
+assign_dir "$OWNER" "/var/www/$DOMAIN"
+
+# Reload NGINX
+_nginx reload
+
+unset DOMAIN FNAME OWNER CREATED_DATE CREATED_TIME PUBLIC_DIR GIT_INTEGRATION REPO BRANCH SSL_CERT DEPLOY_SECRET IP_ADDRESS

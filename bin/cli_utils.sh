@@ -80,7 +80,7 @@ _nginx() {
 	fi
 }
 
-_ssl() {
+ssl() {
 	if [[ "$1" = "add" ]]; then
 		if [[ "$2" ]]; then
 			DOMAIN="$2"
