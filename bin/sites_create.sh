@@ -13,7 +13,7 @@ export BIN=${0:a:h}
 CREATED_DATE=$(date +"%d-%m-%y")
 CREATED_TIME=$(date +"%H:%M:%S")
 
-[[ -f "$HOME/.env" ]] && source "$HOME/.env"
+[[ -f "$HOME/.defaults" ]] && source "$HOME/.defaults"
 
 # #####################################
 

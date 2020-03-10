@@ -8,7 +8,7 @@
 export BIN=${0:a:h}
 
 # Get Defaults
-[[ -f "$HOME/.env" ]] && source "$HOME/.env"
+[[ -f "$HOME/.defaults" ]] && source "$HOME/.defaults"
 
 # Make Hooks dir
 if [[ ! -d "$HOOKS_PATH" ]]; then

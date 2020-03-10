@@ -8,7 +8,7 @@ export BIN=${0:a:h}
 
 # Get Domain
 if [[ -z "$1" ]]; then
-	echo "What site do you want to remove? [example.com]"
+	echo "What site do you want to info on? [example.com]"
 	read -r DOMAIN
 else
 	DOMAIN="$1"

@@ -21,9 +21,9 @@ FNAME="${DOMAIN//./_}"
 
 # ##################
 project_d="/var/www/$DOMAIN"
-scripts_f="SCRIPTS_PATH/$FNAME.sh"
-hook_f="HOOKS_PATH/$FNAME.json"
-info_f="INFO_PATH/$FNAME"
+scripts_f="$SCRIPTS_PATH/$FNAME.sh"
+hook_f="$HOOKS_PATH/$FNAME.json"
+info_f="$INFO_PATH/$FNAME"
 nginx_enabled_f="/etc/nginx/sites-enabled/$DOMAIN"
 nginx_available_f="/etc/nginx/sites-available/$DOMAIN"
 ssl_d="/etc/letsencrypt/live/$DOMAIN"

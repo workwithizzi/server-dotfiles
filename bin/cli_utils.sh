@@ -81,12 +81,15 @@ _nginx() {
 }
 
 ssl() {
+	if [[ "$1" = "add" || "$1" = "delete" ]] && [[ ! "$2" ]]; then
+		echo "Domain Name? [example.com]"
+		read -r DOMAIN
+	else
+		DOMAIN="$2"
+	fi
+
 	if [[ "$1" = "add" ]]; then
-		if [[ "$2" ]]; then
-			DOMAIN="$2"
-		fi
-		source "$BIN/add_site_ssl.sh"
-		unset DOMAIN
+		source "$BIN/add_site_ssl.sh" "$DOMAIN"
 
 	elif [[ "$1" = "renew" ]]; then
 		if [[ "$2" = "dry" ]]; then
@@ -97,8 +100,8 @@ ssl() {
 			sudo certbot renew
 		fi
 	elif [[ "$1" = "delete" ]]; then
-		if [[ "$2" ]]; then
-			sudo certbot delete --cert-name "$2"
+		if [[ -z "$DOMAIN" ]]; then
+			sudo certbot delete --cert-name "$DOMAIN"
 		else
 			# Show list for deletion
 			sudo certbot delete

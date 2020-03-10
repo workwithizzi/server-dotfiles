@@ -6,15 +6,6 @@ export BIN=${0:a:h}
 source "$BIN/utils/colors.sh"
 
 sites() {
-	# if [[ "$1" = "remove" ]] && [[ ! "$2" ]]; then
-	# 	echo "Domain Name? [example.com]"
-	# 	read -r DOMAIN
-	# else
-	# 	DOMAIN="$2"
-	# fi
-	# FNAME="${DOMAIN//./_}"
-
-	# ####################
 
 	if [[ "$1" = "create" ]]; then
 		source "$BIN/sites_create.sh"
@@ -43,12 +34,9 @@ sites() {
 		source "$BIN/sites_rename.sh" "$2" "$3"
 
 	elif [[ "$1" = "defaults" ]]; then
-		echo "defaults-add"
-		echo "defaults-view"
-		echo "defaults-edit"
+		source "$BIN/sites_defaults.sh" "$2"
 
 	else
-		echo "Send help"
-
+		source "$BIN/sites_help.sh"
 	fi
 }

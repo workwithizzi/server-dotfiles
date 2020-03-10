@@ -10,7 +10,7 @@
 export BIN=${0:a:h}
 
 # Get Defaults
-[[ -f "$HOME/.env" ]] && source "$HOME/.env"
+[[ -f "$HOME/.defaults" ]] && source "$HOME/.defaults"
 
 # Make scripts dir
 if [[ ! -d "$SCRIPTS_PATH" ]]; then

@@ -58,17 +58,6 @@ hooks() {
 		hooks start "$2"
 
 	else
-		echo "${BPurple}<hooks> : Shortcuts for working with Webhook${Reset}"
-		echo "commands:"
-		echo "combine: Compiles individual hooks files into \"master\" hooks file."
-		echo "create : Creates the domain's hook file and adds it to the \"master\" hooks file."
-		echo "remove : Removes the domain's hook file and removes it from the \"master\" hooks file."
-		echo "stop   : Stops the webhook process using <kill> command"
-		echo "start  : Starts webhook with hooks in the \"master\" hooks file."
-		echo "restart: Stops. Then starts webhook. Obviously."
-		echo ""
-		echo "options:"
-		echo "[create|remove] : You can also pass the domain name as a second argument"
-		echo "[start|restart] : Use [-v] as a second argument to start webhook in 'verbose' mode."
+		source "$BIN/hooks_help.sh"
 	fi
 }
