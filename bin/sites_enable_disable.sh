@@ -25,14 +25,14 @@ if [[ "$1" = "enable" ]]; then
 	elif [[ -f "$available_f" ]]; then
 		# Do the things
 		sudo ln -s "$available_f" "$enabled_f"
-		# TODO: Make sure these nginx commands are correct
+		# TODO: NGINX - Make sure these commands are correct
 		_nginx reload
 		_nginx check
 
 	# If not available
 	else
 		echo "Something went wrong. $DOMAIN is not available."
-		# TODO: Add nginx function for creating a site
+		# TODO: NGINX - Add function for creating nginx for existing site
 		# echo "Make sure site exists and then try [ _nginx create $DOMAIN ]"
 		return
 	fi
@@ -45,7 +45,7 @@ if [[ "$1" = "disable" ]]; then
 	# Make sure site is enabled
 	if [[ -f "$enabled_f" ]]; then
 		sudo rm "$enabled_f"
-		# TODO: Make sure these nginx commands are correct
+		# TODO: NGINX - Make sure these commands are correct
 		_nginx reload
 		_nginx check
 	else

@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck disable=SC1090,SC2034
+# shellcheck disable=SC1090,SC2034,SC2154
 # Args
 # - 1: domain
 # - 2: owner
@@ -29,6 +29,10 @@ FNAME="${DOMAIN//./_}"
 
 # Make sure the site doesn't already exist
 source "$BIN/check_domain_exists.sh" "$DOMAIN"
+if [[ "$script_exists" = "true" ]]; then
+	echo "There's already a deploy script file for this site."
+	echo "Try [ sites list ] to see all available sites."
+fi
 
 # ##################
 # Get Owner

@@ -115,10 +115,5 @@ ssl() {
 	fi
 }
 
-# Create and configure a new website
-add_site() {
-	source "$BIN/add_site.sh"
-}
-
 source "$BIN/sites.sh"
 source "$BIN/hooks.sh"

@@ -5,6 +5,7 @@
 export BIN=${0:a:h}
 
 # ##################
+# TODO: Add select option to command
 
 # Get Domain
 if [[ -z "$1" ]]; then

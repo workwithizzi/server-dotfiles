@@ -19,6 +19,8 @@ FNAME="${DOMAIN//./_}"
 # TODO: Add test to make sure site exists before going through them
 # TODO: Add option to archive instead of delete
 
+# TODO: Remove works, but prints error message even when there's no error
+
 # ##################
 project_d="/var/www/$DOMAIN"
 scripts_f="$SCRIPTS_PATH/$FNAME.sh"

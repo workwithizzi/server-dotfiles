@@ -28,6 +28,10 @@ FNAME="${DOMAIN//./_}"
 
 # Make sure the site doesn't already exist
 source "$BIN/check_domain_exists.sh" "$DOMAIN"
+if [[ "$hook_exists" = "true" ]]; then
+	echo "There's already a webhook for this site."
+	echo "Try [ sites list ] to see all available sites."
+fi
 
 # ##################
 # Get Owner
@@ -43,9 +47,20 @@ fi
 
 # ##################
 # Get Secret
-# TODO: Add a way to create a unique secret for the deploy
+
+# Create a random secret to use as fallback
+default_secret=$(date | md5sum)
+# remove spaces
+default_secret="${default_secret// /}"
+# remove dashes
+default_secret="${default_secret//-/}"
+
 echo "What is the secret key that you want to use for your webhook?"
+echo "[Default generated secret = $default_secret]"
 read -r DEPLOY_SECRET
+if [[ -z "$DEPLOY_SECRET" ]]; then
+	DEPLOY_SECRET="$default_secret"
+fi
 
 # #####################################
 

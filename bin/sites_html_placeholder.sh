@@ -28,9 +28,6 @@ fi
 # Filename
 FNAME="${DOMAIN//./_}"
 
-# Make sure the site doesn't already exist
-source "$BIN/check_domain_exists.sh" "$DOMAIN"
-
 # ##################
 # Get Owner
 if [[ -z "$2" ]]; then
@@ -53,6 +50,13 @@ else
 fi
 if [[ -z "$PUBLIC_DIR" ]]; then
 	PUBLIC_DIR="$ENV_PUBLIC_DIR"
+fi
+
+# ##################
+# Make sure file doesn't exist
+if [[ -f "/var/www/$DOMAIN/live/$PUBLIC_DIR/index.html" ]]; then
+	echo "Looks like there's already an index.html file for $DOMAIN."
+	echo "Try [ sites list ] to see all available sites."
 fi
 
 # #####################################

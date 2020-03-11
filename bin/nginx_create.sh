@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck disable=SC1090,SC2034
+# shellcheck disable=SC1090,SC2034,SC2154
 #
 # Args
 # - 1: domain
@@ -30,6 +30,10 @@ FNAME="${DOMAIN//./_}"
 
 # Make sure the site doesn't already exist
 source "$BIN/check_domain_exists.sh" "$DOMAIN"
+if [[ "$nginx_available_exists" = "true" ]]; then
+	echo "There's already an NGINX file for this site."
+	echo "Try [ sites list ] to see all available sites."
+fi
 
 # ##################
 # Get Owner

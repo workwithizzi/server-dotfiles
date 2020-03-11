@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck disable=SC1090,SC2034
+# shellcheck disable=SC1090,SC2034,SC2154
 # #####################################
 
 source "$BIN/utils/ask.sh"
@@ -23,6 +23,11 @@ read -r DOMAIN
 
 # Make sure the site doesn't already exist
 source "$BIN/check_domain_exists.sh" "$DOMAIN"
+if [[ "$site_exists" = "true" ]]; then
+	echo "There seems to be some files associated with $DOMAIN."
+	echo "Try running [ sites list ] to see all available sites."
+	return
+fi
 
 # #####################################
 
@@ -85,16 +90,11 @@ fi
 # #####################################
 # NGINX
 source "$BIN/nginx_create.sh" "$DOMAIN" "$OWNER" "$PUBLIC_DIR"
-# TODO: Create enable/reload scripts to use here
 # enable the site with NGINX
-sudo ln -s "/etc/nginx/sites-available/$DOMAIN" "/etc/nginx/sites-enabled/"
+# sudo ln -s "/etc/nginx/sites-available/$DOMAIN" "/etc/nginx/sites-enabled/"
+sites enable "$DOMAIN"
 # Reload NGINX
 _nginx reload
-
-# #####################################
-# #####################################
-# VVVVVVVVVVVVVVVVVVVVVVVVV
-# #####################################
 
 # #####################################
 # SSL Cert

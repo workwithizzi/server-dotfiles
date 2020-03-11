@@ -28,11 +28,50 @@ ssl_d="/etc/letsencrypt/live/$DOMAIN"
 
 # ##################
 
-if [[ -d "$project_d" || -f "$scripts_f" || -f "$hook_f" || -f "$info_f" || -f "$nginx_available_f" || -f "$nginx_enabled_f" || -d "$ssl_d" ]]; then
-	echo "There seems to be some files associated with $DOMAIN."
-	echo "This could cause problems"
-	echo "Try running [ sites list ] to see all the sites."
-	return
+site_exists=false
+project_exists=false
+script_exists=false
+hook_exists=false
+info_exists=false
+nginx_available_exists=false
+nginx_enabled_exists=false
+ssl_exists=false
+
+# ##################
+
+if [[ -d "$project_d" ]]; then
+	site_exists=true
+	project_exists=true
+fi
+
+if [[ -f "$scripts_f" ]]; then
+	site_exists=true
+	script_exists=true
+fi
+
+if [[ -f "$hook_f" ]]; then
+	site_exists=true
+	hook_exists=true
+fi
+
+if [[ -f "$info_f" ]]; then
+	site_exists=true
+	info_exists=true
+fi
+
+if [[ -f "$nginx_available_f" ]]; then
+	site_exists=true
+	nginx_available_exists=true
+fi
+
+if [[ -f "$nginx_enabled_f" ]]; then
+	site_exists=true
+	nginx_enabled_exists=true
+fi
+
+if [[ -d "$ssl_d" ]]; then
+	site_exists=true
+	ssl_exists=true
 fi
 
 # ##################

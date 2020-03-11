@@ -2,6 +2,8 @@
 # shellcheck disable=SC1090,SC2034
 # #####################################
 
+# TODO: queries not working
+
 if [[ -z "$1" ]]; then
 	cd "var/www" || return
 
