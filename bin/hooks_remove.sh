@@ -2,9 +2,11 @@
 # shellcheck disable=SC1090,SC2034
 
 # Get Info
-if [[ ! "$DOMAIN" ]]; then
+if [[ ! "$1" ]]; then
 	echo "Domain Name? [example.com]"
 	read -r DOMAIN
+else
+	DOMAIN="$1"
 fi
 
 FNAME="${DOMAIN//./_}"
