@@ -5,7 +5,7 @@
 # - 2: owner
 # #####################################
 
-export BIN=${0:a:h}
+# export BIN=${0:a:h}
 
 # Get Defaults
 [[ -f "$HOME/.defaults" ]] && source "$HOME/.defaults"

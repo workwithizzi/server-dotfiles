@@ -2,7 +2,7 @@
 # shellcheck disable=SC1090,SC2034
 # #####################################
 
-export BIN=${0:a:h}
+# export BIN=${0:a:h}
 
 source "$BIN/utils/colors.sh"
 
@@ -12,7 +12,7 @@ sites_enable_help() {
 	cmd_h2 "sites enable"
 	cmd_h2_desc "Enable a site in NGINX"
 	cmd_h2_opt_title "options:"
-	cmd_h2_opt "[example.com] Domain name of the site."
+	cmd_h2_opt "[example.com]:" "Domain name of the site."
 }
 
 # ##################
@@ -73,7 +73,7 @@ sites_disable_help() {
 	cmd_h2 "sites disable"
 	cmd_h2_desc "Disable a site in NGINX so that it's not accessible online"
 	cmd_h2_opt_title "options:"
-	cmd_h2_opt "[example.com] Domain name of the site."
+	cmd_h2_opt "[example.com]:" "Domain name of the site."
 }
 
 # ##################

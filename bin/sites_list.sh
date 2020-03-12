@@ -2,7 +2,7 @@
 # shellcheck disable=SC1090,SC2034
 # #####################################
 
-export BIN=${0:a:h}
+# export BIN=${0:a:h}
 source "$BIN/utils/colors.sh"
 
 # ##################

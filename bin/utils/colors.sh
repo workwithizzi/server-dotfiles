@@ -107,5 +107,5 @@ cmd_h2_opt_title() {
 
 # Sub-Command Option
 cmd_h2_opt() {
-	echo -e "  - $1"
+	echo -e "${Yellow}  - $1${Reset}" "$2"
 }

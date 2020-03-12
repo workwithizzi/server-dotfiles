@@ -2,7 +2,7 @@
 # shellcheck disable=SC1090,SC2034
 # #####################################
 
-export BIN=${0:a:h}
+# export BIN=${0:a:h}
 
 source "$BIN/utils/colors.sh"
 
@@ -12,10 +12,10 @@ sites_rename_help() {
 	cmd_h2 "sites rename"
 	cmd_h2_desc "Renames a site and all related hosting files"
 	cmd_h2_desc "Does not affect actual project files."
-	cmd_h2_opt_title "option 1"
-	cmd_h2_opt "[old-name.com] original domain name of the site."
-	cmd_h2_opt_title "option 2"
-	cmd_h2_opt "[new-name.com] New domain name of the site."
+	cmd_h2_opt_title "option 1:"
+	cmd_h2_opt "[old-name.com]:" "original domain name of the site."
+	cmd_h2_opt_title "option 2:"
+	cmd_h2_opt "[new-name.com]:" "New domain name of the site."
 }
 
 # ##################

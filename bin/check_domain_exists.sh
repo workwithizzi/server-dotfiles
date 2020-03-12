@@ -5,7 +5,7 @@
 # so that it can be created
 # #####################################
 
-export BIN=${0:a:h}
+# export BIN=${0:a:h}
 
 # Get Info
 if [[ -z "$1" ]]; then

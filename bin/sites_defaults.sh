@@ -8,7 +8,7 @@
 # 1 - [empty] = prints help info
 # #####################################
 
-export BIN=${0:a:h}
+# export BIN=${0:a:h}
 
 source "$BIN/utils/colors.sh"
 
@@ -19,10 +19,10 @@ sites_defaults_help() {
 	cmd_h2_desc "Configures default settings to be used"
 	cmd_h2_desc "when creating and working with sites."
 	cmd_h2_opt_title "options:"
-	cmd_h2_opt "[empty] : Prints this help info"
-	cmd_h2_opt "create  : Create defaults if they don't exist"
-	cmd_h2_opt "update  : Update current defaults"
-	cmd_h2_opt "view    : View current defaults"
+	cmd_h2_opt "[empty] :" "Prints this help info"
+	cmd_h2_opt "create  :" "Create defaults if they don't exist"
+	cmd_h2_opt "update  :" "Update current defaults"
+	cmd_h2_opt "view    :" "View current defaults"
 }
 
 # ##################

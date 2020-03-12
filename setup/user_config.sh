@@ -4,7 +4,9 @@
 
 doing() { echo "🚀  ""$*"; }
 
-export SETUP_D=${0:a:h}
+export DOTFILES="$HOME/_dotfiles"
+export SETUP_D="$DOTFILES/setup"
+
 # #####################################
 
 doing "Configuring shell environment for [$USER]"

@@ -2,7 +2,7 @@
 # shellcheck disable=SC1090,SC2034,SC2154
 # #####################################
 
-export BIN=${0:a:h}
+# export BIN=${0:a:h}
 source "$BIN/utils/ask.sh"
 source "$BIN/utils/colors.sh"
 
@@ -12,12 +12,12 @@ sites_create_help() {
 	cmd_h2 "sites create"
 	cmd_h2_desc "Create and configure a new site by following prompts"
 	cmd_h2_opt_title "includes:"
-	cmd_h2_opt "Creating site files with index.html placeholder"
-	cmd_h2_opt "Setting up NGIX config"
-	cmd_h2_opt "Creating SSL certs for site"
-	cmd_h2_opt "Importing from Github repo"
-	cmd_h2_opt "Configuring Webhook for Github automation"
-	cmd_h2_opt "Confgiuring Deploy script"
+	cmd_h2_opt "" "Creating site files with index.html placeholder"
+	cmd_h2_opt "" "Setting up NGIX config"
+	cmd_h2_opt "" "Creating SSL certs for site"
+	cmd_h2_opt "" "Importing from Github repo"
+	cmd_h2_opt "" "Configuring Webhook for Github automation"
+	cmd_h2_opt "" "Confgiuring Deploy script"
 }
 
 # ##################
@@ -39,7 +39,7 @@ sites_create_cmd() {
 	# #####################################
 
 	# Get the user input:
-	echo "Domain Name (example.com)?"
+	echo "Domain Name [example.com]?"
 	read -r DOMAIN
 
 	# Make sure the site doesn't already exist
@@ -52,7 +52,7 @@ sites_create_cmd() {
 
 	# #####################################
 
-	echo "Which user is the owner of this site? [Default = $ENV_SITE_OWNER"
+	echo "Which user is the owner of this site? [Default = $ENV_SITE_OWNER]"
 	read -r OWNER
 	if [[ -z "$OWNER" ]]; then
 		OWNER="$ENV_SITE_OWNER"

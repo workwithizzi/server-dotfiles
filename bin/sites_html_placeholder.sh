@@ -7,7 +7,7 @@
 # - 3: public directory
 # #####################################
 
-export BIN=${0:a:h}
+# export BIN=${0:a:h}
 
 # Get Defaults
 [[ -f "$HOME/.defaults" ]] && source "$HOME/.defaults"

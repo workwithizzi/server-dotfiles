@@ -2,7 +2,7 @@
 # shellcheck disable=SC1090,SC2034
 # #####################################
 
-export BIN=${0:a:h}
+# export BIN=${0:a:h}
 
 source "$BIN/utils/colors.sh"
 
@@ -12,7 +12,7 @@ sites_remove_help() {
 	cmd_h2 "sites remove"
 	cmd_h2_desc "Completely remove a site--and all related files"
 	cmd_h2_opt_title "options:"
-	cmd_h2_opt "[example.com] Domain name of the site to remove"
+	cmd_h2_opt "[example.com]:" "Domain name of the site to remove"
 }
 
 # ##################
@@ -44,6 +44,7 @@ sites_remove_cmd() {
 	nginx_available_f="/etc/nginx/sites-available/$DOMAIN"
 	ssl_d="/etc/letsencrypt/live/$DOMAIN"
 
+	files_removed=false
 	# ##################
 	# Nginx
 	if [[ -f "$nginx_enabled_f" ]]; then
@@ -99,14 +100,14 @@ sites_remove_cmd() {
 	# ##################
 	# SSL Cert
 	if [[ -d "$ssl_d" ]]; then
+		echo "Removing SSL cert."
 		sudo certbot delete --cert-name "$DOMAIN"
-		echo "SSL cert was removed."
 		files_removed=true
 	fi
 
 	# ##################
 
-	if [[ -z "$files_removed" ]]; then
+	if [[ "$files_removed" = "true" ]]; then
 		echo "All files related to $DOMAIN have been removed."
 	else
 		echo "There were no files related to $DOMAIN to remove."

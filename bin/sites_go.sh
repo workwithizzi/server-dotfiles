@@ -4,7 +4,7 @@
 # <sites go>
 # #####################################
 
-export BIN=${0:a:h}
+# export BIN=${0:a:h}
 
 source "$BIN/utils/colors.sh"
 
@@ -14,11 +14,11 @@ sites_go_help() {
 	cmd_h2 "sites go"
 	cmd_h2_desc "Takes you to a directory related to a site or sites"
 	cmd_h2_opt_title "options:"
-	cmd_h2_opt "no-option    : Base directory for all sites (/var/www)"
-	cmd_h2_opt "info         : Base directory for all info files"
-	cmd_h2_opt "scripts      : Base directory for all deploy scripts"
-	cmd_h2_opt "hooks        : Base directory for all webhooks"
-	cmd_h2_opt "[example.com]: Root directory for example.com"
+	cmd_h2_opt "no-option    :" "Base directory for all sites (/var/www)"
+	cmd_h2_opt "info         :" "Base directory for all info files"
+	cmd_h2_opt "scripts      :" "Base directory for all deploy scripts"
+	cmd_h2_opt "hooks        :" "Base directory for all webhooks"
+	cmd_h2_opt "[example.com]:" "Root directory for example.com"
 }
 
 # ##################
