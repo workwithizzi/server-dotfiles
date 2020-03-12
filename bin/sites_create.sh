@@ -2,7 +2,6 @@
 # shellcheck disable=SC1090,SC2034,SC2154
 # #####################################
 
-# export BIN=${0:a:h}
 source "$BIN/utils/ask.sh"
 source "$BIN/utils/colors.sh"
 
@@ -30,7 +29,6 @@ sites_create_cmd() {
 		return
 	fi
 
-	export BIN=${0:a:h}
 	CREATED_DATE=$(date +"%d-%m-%y")
 	CREATED_TIME=$(date +"%H:%M:%S")
 
@@ -121,7 +119,7 @@ sites_create_cmd() {
 	# SSL Cert
 	if ask "Do you want to add an SSL certificate?" Y; then
 		export SSL_CERT=true
-		source "$BIN/ssl_create.sh" "$DOMAIN"
+		ssl_create "$DOMAIN"
 	else
 		export SSL_CERT=false
 	fi

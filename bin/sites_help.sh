@@ -2,10 +2,6 @@
 # shellcheck disable=SC1090,SC2034,SC2154
 # #####################################
 
-# export BIN=${0:a:h}
-
-# ##################
-
 cmd_h1 "sites"
 cmd_desc "Shortcuts for managing sites"
 

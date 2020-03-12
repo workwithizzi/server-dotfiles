@@ -2,9 +2,6 @@
 # shellcheck disable=SC1090,SC2034
 # #####################################
 
-# export BIN=${0:a:h}
-# source "$BIN/utils/colors.sh"
-
 sites() {
 
 	if [[ "$1" = "create" ]]; then

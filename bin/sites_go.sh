@@ -4,8 +4,6 @@
 # <sites go>
 # #####################################
 
-# export BIN=${0:a:h}
-
 source "$BIN/utils/colors.sh"
 
 # ##################

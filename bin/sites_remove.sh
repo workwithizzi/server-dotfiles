@@ -2,8 +2,6 @@
 # shellcheck disable=SC1090,SC2034
 # #####################################
 
-# export BIN=${0:a:h}
-
 source "$BIN/utils/colors.sh"
 
 # ##################
@@ -14,6 +12,8 @@ sites_remove_help() {
 	cmd_h2_opt_title "options:"
 	cmd_h2_opt "[example.com]:" "Domain name of the site to remove"
 }
+
+# TODO: Add option to archive instead of delete
 
 # ##################
 # Task Function
@@ -28,12 +28,6 @@ sites_remove_cmd() {
 	fi
 	# Filename
 	FNAME="${DOMAIN//./_}"
-
-	# ##################
-	# TODO: Add test to make sure site exists before going through them
-	# TODO: Add option to archive instead of delete
-
-	# TODO: Remove works, but prints error message even when there's no error
 
 	# ##################
 	project_d="/var/www/$DOMAIN"

@@ -151,4 +151,4 @@ mkdircd() { mkdir "$*" && cd "$*" || return; }
 # Utilities
 # #####################################
 
-include "$BIN/cli_utils.sh"
+include "$BIN/cli.sh"
